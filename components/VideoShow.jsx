@@ -129,15 +129,14 @@ const VideoShow = ({ peer, socket, roomId }) => {
       <div className="flex">
         <div
           id="all-video-stream"
-          className={`${styles.videoGridClass} w-2/3`}
-        ></div>
-        <div
-          id="local-video"
-          className={`${styles.localVideoClass} absolute top-0 right-0`}
+          className={`${styles.videoGridClass} grid grid-cols-2 md:grid-cols-3 gap-4`}
         ></div>
       </div>
-
-      <div className="absolute bottom-0 w-full">
+      <div
+        id="local-video"
+        className={`${styles.localVideoClass} absolute top-0 right-0`}
+      ></div>
+      <div className="fixed bottom-0 w-full">
         <div className="flex w-full justify-around text-2xl bg-white py-2">
           <div
             className={`p-3 rounded-full border-2 cursor-pointer ${

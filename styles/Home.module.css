@@ -1,7 +1,5 @@
 .videoGridClass {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 300px);
-  grid-auto-rows: 300px;
 }
 
 .video-grid-class > video {
@@ -11,11 +9,33 @@
 }
 
 .localVideoClass {
-  width: 300px;
+  width: 200px;
 }
 
 .video-class > video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+@media only screen and (max-width: 600px) {
+  .videoGridClass {
+    display: grid;
+  }
+
+  .video-grid-class > video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .localVideoClass {
+    width: 50px;
+  }
+
+  .video-class > video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
