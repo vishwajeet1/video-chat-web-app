@@ -6,7 +6,6 @@ import { BiVideoOff } from "react-icons/bi";
 import { useRouter } from "next/router";
 
 const VideoShow = ({ peer, socket, roomId }) => {
-  const router = useRouter();
   const handleCloseMeeting = () => {
     window.open("/", "_self");
   };
@@ -17,7 +16,7 @@ const VideoShow = ({ peer, socket, roomId }) => {
   const myVideo = document.createElement("video");
   myVideo.id = peer.id;
   myVideo.muted = true;
-  const peers = {};
+  let peersUsers = [];
   const mediaDevices = navigator.mediaDevices;
   if (!mediaDevices) {
     return <div>not support</div>;
@@ -28,14 +27,17 @@ const VideoShow = ({ peer, socket, roomId }) => {
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         setLocalStream(stream);
-        addVideoStream(myVideo, stream, "local-video");
+        addVideoStream(myVideo, stream, "local-video", peer.id);
         peer.on("call", (call) => {
           call.answer(stream);
           const video = document.createElement("video");
-          video.id = call.peer;
           call.on("stream", (userVideoStream) => {
-            console.log("userVideoStream", userVideoStream);
-            addVideoStream(video, userVideoStream, "all-video-stream");
+            addVideoStream(
+              video,
+              userVideoStream,
+              "all-video-stream",
+              call.peer
+            );
           });
           call.on("closed", () => {
             console.log("close");
@@ -50,27 +52,29 @@ const VideoShow = ({ peer, socket, roomId }) => {
   }, []);
 
   socket.on("user-disconnected", (userId) => {
-    console.log("disconnect", userId);
+    console.log("disconnect", peersUsers);
+    const index = peersUsers.indexOf(userId);
+    if (index > -1) {
+      peersUsers.splice(index, 1);
+    }
+    console.log("after disconnect", peersUsers);
     const removedUser = document.getElementById(userId);
     if (removedUser) {
       removedUser.remove();
     }
-    if (peers[userId]) peers[userId].close();
   });
 
   const connectToNewUser = (userId, stream) => {
     console.log("userConnectedId", userId);
     const call = peer.call(userId, stream);
     const video = document.createElement("video");
-    video.id = userId;
     call.on("stream", (userVideoStream) => {
-      addVideoStream(video, userVideoStream, "all-video-stream");
+      addVideoStream(video, userVideoStream, "all-video-stream", userId);
     });
     call.on("close", () => {
       console.log("close");
       video.remove();
     });
-    peer[userId] = call;
   };
 
   peer.on("open", (id) => {
@@ -81,11 +85,16 @@ const VideoShow = ({ peer, socket, roomId }) => {
     // console.log(`I'm connected with the back-end`, data);
   });
   socket.on("user-connected", (userId) => {
-    console.log(`I'm connected with the back-end`, userId);
+    console.log(`user-connected`, userId);
   });
 
-  const addVideoStream = (video, stream, appendID) => {
+  const addVideoStream = (video, stream, appendID, userId) => {
+    if (peersUsers.includes(userId)) {
+      return;
+    }
+    peersUsers.push(userId);
     video.srcObject = stream;
+    video.id = userId;
     video.addEventListener("loadedmetadata", () => {
       video.play();
     });
