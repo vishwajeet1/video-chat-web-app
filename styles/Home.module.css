@@ -1,4 +1,4 @@
-.video-grid-class {
+.videoGridClass {
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
   grid-auto-rows: 300px;
@@ -11,9 +11,7 @@
 }
 
 .localVideoClass {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 300px);
-  grid-auto-rows: 300px;
+  width: 300px;
 }
 
 .video-class > video {
