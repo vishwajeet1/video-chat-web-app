@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
 import VideoShow from "../components/VideoShow";
 import socketClient from "socket.io-client";
-import { useRouter } from "next/router";
+import publicIp from "public-ip";
 const SERVER = "https://frozen-coast-85988.herokuapp.com";
 const socket = new socketClient(SERVER, {
   query: {
@@ -10,6 +10,23 @@ const socket = new socketClient(SERVER, {
   },
 });
 const RoomId = ({ roomId }) => {
+  const getPublicIp = async () => {
+    let ipOfUser = "";
+    try {
+      ipOfUser = await publicIp.v4();
+    } catch {
+      try {
+        ipOfUser = await publicIp.v6();
+      } catch {
+        ipOfUser = "not found";
+      }
+    }
+    console.log(`joined_room userIp - ${ipOfUser} roomId - ${roomId}`);
+  };
+
+  useEffect(() => {
+    getPublicIp();
+  }, []);
   const [myPeer, setMyPeer] = useState(null);
   const joinRoomEventHandler = () => {
     const peer = new Peer(undefined);

@@ -3,10 +3,32 @@ import Head from "next/head";
 import { v4 as uuid } from "uuid";
 import { useRouter } from "next/router";
 import { FcApproval } from "react-icons/fc";
+import publicIp from "public-ip";
 export default function Home() {
+  const [userPublicIp, setUserPublicIp] = useState("");
   const router = useRouter();
+  const getPublicIp = async () => {
+    let ipOfUser = "";
+    try {
+      ipOfUser = await publicIp.v4();
+    } catch {
+      try {
+        ipOfUser = await publicIp.v6();
+      } catch {
+        ipOfUser = "not found";
+      }
+    }
+    setUserPublicIp(ipOfUser);
+  };
+
+  useEffect(() => {
+    getPublicIp();
+  }, []);
+
   const handleNewMeeting = () => {
-    router.push(`/${uuid()}`);
+    const uniqueId = uuid();
+    console.log(`join_cta userIp - ${userPublicIp} roomId - ${uniqueId}`);
+    router.push(`/${uniqueId}`);
   };
   return (
     <div>
