@@ -11,8 +11,8 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>video Chat</title>
+        <link rel="icon" href="/chat_video.ico" />
         <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
       </Head>
       <div className="bg-gradient-to-r from-purple-600 via-blue-900 to-indigo-900 h-screen flex justify-center items-center flex-col">

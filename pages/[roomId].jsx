@@ -22,8 +22,8 @@ const RoomId = ({ roomId }) => {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>video Chat</title>
+        <link rel="icon" href="/chat_video.ico" />
         <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
       </Head>
       {myPeer && <VideoShow peer={myPeer} socket={socket} roomId={roomId} />}
