@@ -10,6 +10,7 @@ const socket = new socketClient(SERVER, {
   },
 });
 const RoomId = ({ roomId }) => {
+  const [userPublicIp, setUserPublicIp] = useState("");
   const getPublicIp = async () => {
     let ipOfUser = "";
     try {
@@ -22,6 +23,7 @@ const RoomId = ({ roomId }) => {
       }
     }
     console.log(`joined_room userIp - ${ipOfUser} roomId - ${roomId}`);
+    setUserPublicIp(ipOfUser);
   };
 
   useEffect(() => {
@@ -43,7 +45,14 @@ const RoomId = ({ roomId }) => {
         <link rel="icon" href="/chat_video.ico" />
         <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
       </Head>
-      {myPeer && <VideoShow peer={myPeer} socket={socket} roomId={roomId} />}
+      {myPeer && (
+        <VideoShow
+          peer={myPeer}
+          socket={socket}
+          roomId={roomId}
+          publicIp={userPublicIp}
+        />
+      )}
     </div>
   );
 };

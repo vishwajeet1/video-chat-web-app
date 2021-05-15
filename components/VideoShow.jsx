@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import Controller from "./Controller";
 import { elementId, elementName, className } from "constant";
 
-const VideoShow = ({ peer, socket, roomId }) => {
+const VideoShow = ({ peer, socket, roomId, publicIp }) => {
   const [copyLinkState, setCopyLinkState] = useState(true);
   const [copyLink, setCopyLink] = useState(false);
   const [localStream, setLocalStream] = useState(null);
@@ -112,7 +112,7 @@ const VideoShow = ({ peer, socket, roomId }) => {
   };
 
   peer.on("open", (id) => {
-    socket.emit("join-room", roomId, id);
+    socket.emit("join-room", roomId, id, publicIp);
   });
 
   socket.on("user-connected", (userId) => {});
